@@ -1,5 +1,18 @@
 # dnn-autonomous-car
 
+## Ref
+* CAR SIMULATOR
+* [Carla](http://carla.org/)
+* [LGSVL](https://www.lgsvlsimulator.com/)
+* [webots](https://cyberbotics.com/doc/automobile/introduction)
+* [Udacity Self-Driving Car Engineer Nano Degree](https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013)
+* [AutoRCCar](https://zhengludwig.wordpress.com/projects/self-driving-rc-car/)
+* [deepcar](https://arztsamuel.github.io/en/projects/unity/deepCars/deepCars.html)
+* GENERAL PURPOSE SIMULATOR
+* [v-rep](http://www.coppeliarobotics.com/)
+* [webots](https://cyberbotics.com/#webots)
+
+
 ## Dependencies
 
 You can install all dependencies by running one of the following commands
