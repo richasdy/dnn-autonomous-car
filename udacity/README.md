@@ -6,6 +6,7 @@
 * https://github.com/udacity/self-driving-car-sim
 * https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013
 * https://github.com/ndrplz/self-driving-car
+* https://github.com/udacity?utf8=%E2%9C%93&q=car
 * https://medium.com/deep-learning-turkey/behavioral-cloning-udacity-self-driving-car-project-generator-bottleneck-problem-in-using-gpu-182ee407dbc5
 
 ## Dependencies
