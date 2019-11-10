@@ -1,13 +1,18 @@
 # Udacity Self-Driving Car Engineer Nano Degree
 
 ## Ref
+* paper : https://medium.com/deep-learning-turkey/behavioral-cloning-udacity-self-driving-car-project-generator-bottleneck-problem-in-using-gpu-182ee407dbc5
+* code : https://github.com/bahadir60/Udacity-Self-Driving-Car
+* data : https://drive.google.com/drive/folders/1_a8tmhlsrWfp_vyi6uN_js6RqupJ8zFl?usp=sharing
+* ----------
 * https://www.youtube.com/watch?v=EaY5QiZwSP4
 * https://github.com/llSourcell/How_to_simulate_a_self_driving_car
 * https://github.com/udacity/self-driving-car-sim
 * https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013
 * https://github.com/ndrplz/self-driving-car
 * https://github.com/udacity?utf8=%E2%9C%93&q=car
-* https://medium.com/deep-learning-turkey/behavioral-cloning-udacity-self-driving-car-project-generator-bottleneck-problem-in-using-gpu-182ee407dbc5
+* https://github.com/udacity/CarND-Behavioral-Cloning-P3
+* https://github.com/ndrplz/self-driving-car/tree/master/project_3_behavioral_cloning
 
 ## Dependencies
 
