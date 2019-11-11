@@ -7,12 +7,16 @@
 * ----------
 * https://www.youtube.com/watch?v=EaY5QiZwSP4
 * https://github.com/llSourcell/How_to_simulate_a_self_driving_car
+* https://github.com/udacity/CarND-Behavioral-Cloning-P3
+* https://github.com/naokishibuya/car-behavioral-cloning
+* https://github.com/ndrplz/self-driving-car/tree/master/project_3_behavioral_cloning
+* ----------
+* https://askubuntu.com/questions/1077816/how-to-install-unity3d-on-ubuntu-18-04
 * https://github.com/udacity/self-driving-car-sim
 * https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd013
 * https://github.com/ndrplz/self-driving-car
 * https://github.com/udacity?utf8=%E2%9C%93&q=car
-* https://github.com/udacity/CarND-Behavioral-Cloning-P3
-* https://github.com/ndrplz/self-driving-car/tree/master/project_3_behavioral_cloning
+
 
 ## Dependencies
 
@@ -51,10 +55,6 @@ python model.py
 ```
 
 This will generate a file `model-<epoch>.h5` whenever the performance in the epoch is better than the previous best.  For example, the first epoch will generate a file called `model-000.h5`.
-
-## Credits
-
-The credits for this code go to [naokishibuya](https://github.com/naokishibuya). I've merely created a wrapper to get people started.
 
 
 
