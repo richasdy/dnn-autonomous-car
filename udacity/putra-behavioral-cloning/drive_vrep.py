@@ -223,15 +223,15 @@ while vrep.simxGetConnectionId(clientID) != -1:
     # vl = (fuzzy.output['outputL']) 
     # vr = (fuzzy.output['outputR'])   
     
-    # # kirim balik data ke scene
-    # #fuzzy + braitenberg for additional turning
-    # vBrLeft=vl
-    # vBrRight=vr
-    # for i in range(0,4):
-    #     vBrLeft=vBrLeft+(braitenbergL[i]*(1-val_s[i+4]))
-    #     vBrRight=vBrRight+(braitenbergR[i]*(1-val_s[i+4]))
+     # kirim balik data ke scene
+     #fuzzy + braitenberg for additional turning
+     vBrLeft=vl
+     vBrRight=vr
+     for i in range(0,4):
+         vBrLeft=vBrLeft+(braitenbergL[i]*(1-val_s[i+4]))
+         vBrRight=vBrRight+(braitenbergR[i]*(1-val_s[i+4]))
 
-    # forward(5+vBrLeft,5+vBrRight)
+     forward(5+vBrLeft,5+vBrRight)
     
     #Debug Sensor 
     """aa = round(sLeft,2)
