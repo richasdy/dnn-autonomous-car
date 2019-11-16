@@ -163,4 +163,4 @@ checkpointer = ModelCheckpoint('model_train_turki.h5', monitor='val_loss', verbo
 results = model.fit(X_train_s, y_train_s, batch_size=32, epochs=1, verbose=1)
 model.save('model_train_turki.h5')
 
-model.evaluate(X_valid_s, y_valid_s)
+print(model.evaluate(X_valid_s, y_valid_s))

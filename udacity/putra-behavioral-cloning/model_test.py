@@ -90,8 +90,8 @@ print('Total Train samples: {}\nTotal Valid samples: {}'.format(len(X_train), le
 X_train_s, y_train_s = shuffle(X_train, y_train)
 X_valid_s, y_valid_s= shuffle(X_valid, y_valid)
 
-#model = load_model('model_train_naoki.h5')
-model = load_model('model_train_turki.h5')
+model = load_model('model_train_naoki.h5')
+#model = load_model('model_train_turki.h5')
 
 #model.evaluate(X_train_s, y_train_s)
 
