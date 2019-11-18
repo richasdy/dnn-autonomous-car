@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Nov 17 14:48:00 2019
-
-@author: richasdy
+Created on Fri Mar 29 14:02:59 2019
+@author: HambaAllah
+Dibuat dalam rangka Syarat kelulusan matakuliah Tesis Magister instrumentasi dan Kontrol 
+Bismillah
 """
 
 import time
@@ -15,7 +15,17 @@ import array
 from PIL import Image
 from datetime import datetime
 import pandas as pd 
+import csv
+import cv2
+from tensorflow.keras.models import load_model
 
+
+MAX_SPEED = 25
+MIN_SPEED = 10
+
+speed_limit = MAX_SPEED
+
+'''~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~My Program Start From Here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '''
 #Remote API Configuration
 vrep.simxFinish(-1) 
 clientID=vrep.simxStart ('127.0.0.1',19997,True,True,5000,5)
@@ -25,46 +35,163 @@ if clientID!=-1:
 else: 
     print ("Connection not successful")
     sys.exit("Could not connect")
+    
+#image handler
+err_handler_camera_c,handler_camera_c = vrep.simxGetObjectHandle(clientID,'golfcar_vision_c',vrep.simx_opmode_oneshot_wait)
+err_handler_camera_l,handler_camera_l = vrep.simxGetObjectHandle(clientID,'golfcar_vision_l',vrep.simx_opmode_oneshot_wait)
+err_handler_camera_r,handler_camera_r = vrep.simxGetObjectHandle(clientID,'golfcar_vision_r',vrep.simx_opmode_oneshot_wait)
 
-#Get the handle of vision sensor
-err,camera = vrep.simxGetObjectHandle(clientID,'golfcar_vision',vrep.simx_opmode_oneshot_wait)
+#sensor handler
+err_handler_sensor1,handler_sensor1 = vrep.simxGetObjectHandle(clientID,'sensor1',vrep.simx_opmode_oneshot_wait)
+err_handler_sensor2,handler_sensor2 = vrep.simxGetObjectHandle(clientID,'sensor2',vrep.simx_opmode_oneshot_wait)
+err_handler_sensor3,handler_sensor3 = vrep.simxGetObjectHandle(clientID,'sensor3',vrep.simx_opmode_oneshot_wait)
+err_handler_sensor4,handler_sensor4 = vrep.simxGetObjectHandle(clientID,'sensor4',vrep.simx_opmode_oneshot_wait)
+err_handler_sensor5,handler_sensor5 = vrep.simxGetObjectHandle(clientID,'sensor5',vrep.simx_opmode_oneshot_wait)
+err_handler_sensor6,handler_sensor6 = vrep.simxGetObjectHandle(clientID,'sensor6',vrep.simx_opmode_oneshot_wait)
 
-#start Simulator
+#state handler
+err_handler_steering,handler_steering = vrep.simxGetObjectHandle(clientID,'steering',vrep.simx_opmode_oneshot_wait)
+err_handler_thorttle,handler_thorttle = vrep.simxGetObjectHandle(clientID,'thorttle',vrep.simx_opmode_oneshot_wait)
+err_handler_speed,handler_speed = vrep.simxGetObjectHandle(clientID,'speed',vrep.simx_opmode_oneshot_wait)
+err_handler_brake,handler_brake = vrep.simxGetObjectHandle(clientID,'brake',vrep.simx_opmode_oneshot_wait)
+
 vrep.simxStartSimulation(clientID,vrep.simx_opmode_oneshot_wait)
 
-#Get the image of vision sensor
-err,resolution,image = vrep.simxGetVisionSensorImage(clientID,camera,0,vrep.simx_opmode_streaming)
+
+
+
+#get image
+err_image_c,resolution_image_c,image_c = vrep.simxGetVisionSensorImage(clientID,handler_camera_c,0,vrep.simx_opmode_streaming)
+err_image_c,resolution_image_c,image_l = vrep.simxGetVisionSensorImage(clientID,handler_camera_l,0,vrep.simx_opmode_streaming)
+err_image_c,resolution_image_c,image_r = vrep.simxGetVisionSensorImage(clientID,handler_camera_r,0,vrep.simx_opmode_streaming)
+
+#get sensor
+err_signal1,signal1=vrep.simxGetFloatSignal(clientID,handler_sensor1,vrep.simx_opmode_streaming)
+err_signal2,signal2=vrep.simxGetFloatSignal(clientID,handler_sensor2,vrep.simx_opmode_streaming)
+err_signal3,signal3=vrep.simxGetFloatSignal(clientID,handler_sensor3,vrep.simx_opmode_streaming)
+err_signal4,signal4=vrep.simxGetFloatSignal(clientID,handler_sensor4,vrep.simx_opmode_streaming)
+err_signal5,signal5=vrep.simxGetFloatSignal(clientID,handler_sensor5,vrep.simx_opmode_streaming)
+err_signal6,signal6=vrep.simxGetFloatSignal(clientID,handler_sensor6,vrep.simx_opmode_streaming)
+
+#get state
+err_steering,steering=vrep.simxGetFloatSignal(clientID,handler_steering,vrep.simx_opmode_streaming)
+err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,handler_thorttle,vrep.simx_opmode_streaming)
+err_speed,speed=vrep.simxGetFloatSignal(clientID,handler_speed,vrep.simx_opmode_streaming)
+err_brake,brake=vrep.simxGetFloatSignal(clientID,handler_brake,vrep.simx_opmode_streaming)
 
 #log initialization
-driving_log = pd.DataFrame(columns=["center", "right", "left", "sensor1", "sensor2", "sensor3", "sensor4", "sensor5", "sensor6", "steering", "thorttle", "speed", "brake"])
+driving_log = pd.DataFrame(columns=["center", "right", "left", "signal1", "signal2", "signal3", "signal4", "signal5", "signal6", "steering", "thorttle", "speed", "brake"])
+
+images = []    
+
+'''~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~My Loop Start From Here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '''
 
 while vrep.simxGetConnectionId(clientID) != -1:
     
-    # sensor data initialization
+    
+    
+    #image name initialization
     img_name_center = 'data/img/center_'+datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]+'.jpg'
     img_name_right = 'data/img/right_'+datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]+'.jpg'
     img_name_left = 'data/img/left_'+datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]+'.jpg'
-    sensor1 = 0
-    sensor2 = 0
-    sensor3 = 0
-    sensor4 = 0
-    sensor5 = 0
-    sensor6 = 0
-    steering = 30
-    thorttle = 40
-    speed = 10
+    
+    # sensor data initialization
+    img_center = []
+    img_right = []
+    img_left = []
+    signal1 = 0
+    signal2 = 0
+    signal3 = 0
+    signal4 = 0
+    signal5 = 0
+    signal6 = 0
+    steering = 0
+    thorttle = 0
+    speed = 0
     brake = 0
+    
+    
+    
+    #sensor data acquisition
+    #image acquisition
+    #image center
+    #https://programmer.group/v-rep-adding-vision-sensor-and-image-acquisition.html
+    err_c,resolution_c,image_c = vrep.simxGetVisionSensorImage(clientID,handler_camera_c,0,vrep.simx_opmode_buffer)
+    sensorImage_c = []
+    sensorImage_c = np.array(image_c,dtype = np.uint8)
+    sensorImage_c.resize([256,512,3])
+    img_center = Image.fromarray(sensorImage_c, 'RGB')
+    
+    #image left
+    err_l,resolution_l,image_l = vrep.simxGetVisionSensorImage(clientID,handler_camera_l,0,vrep.simx_opmode_buffer)
+    sensorImage_l = []
+    sensorImage_l = np.array(image_c,dtype = np.uint8)
+    sensorImage_l.resize([256,512,3])
+    img_left = Image.fromarray(sensorImage_l, 'RGB')
+    
+    #image right
+    err_r,resolution_r,image_r = vrep.simxGetVisionSensorImage(clientID,handler_camera_r,0,vrep.simx_opmode_buffer)
+    sensorImage_r = []
+    sensorImage_r = np.array(image_r,dtype = np.uint8)
+    sensorImage_r.resize([256,512,3])
+    img_right = Image.fromarray(sensorImage_r, 'RGB')
+    
+    
+    
+    #save image
+    img_center.save(img_name_center)
+    img_right.save(img_name_right)
+    img_left.save(img_name_left)
+    
+    
+    
+    #sensor1
+    err_signal1,signal1=vrep.simxGetFloatSignal(clientID,handler_sensor1,vrep.simx_opmode_buffer)
+    
+    #sensor2
+    err_signal2,signal2=vrep.simxGetFloatSignal(clientID,handler_sensor2,vrep.simx_opmode_buffer)
+    
+    #sensor3
+    err_signal3,signal3=vrep.simxGetFloatSignal(clientID,handler_sensor3,vrep.simx_opmode_buffer)
+    
+    #sensor4
+    err_signal4,signal4=vrep.simxGetFloatSignal(clientID,handler_sensor4,vrep.simx_opmode_buffer)
+    
+    #sensor5
+    err_signal5,signal5=vrep.simxGetFloatSignal(clientID,handler_sensor5,vrep.simx_opmode_buffer)
+    
+    #sensor6
+    err_signal6,signal6=vrep.simxGetFloatSignal(clientID,handler_sensor6,vrep.simx_opmode_buffer)
+    
+    #steering
+    err_steering,steering=vrep.simxGetFloatSignal(clientID,handler_steering,vrep.simx_opmode_buffer)
+    
+    #thorttle
+    err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,handler_thorttle,vrep.simx_opmode_buffer)
+    
+    #speed
+    err_speed,speed=vrep.simxGetFloatSignal(clientID,handler_speed,vrep.simx_opmode_buffer)
+    
+    #brake
+    err_brake,brake=vrep.simxGetFloatSignal(clientID,handler_brake,vrep.simx_opmode_buffer)
+    
+    
+    
+    #print status
+    print('{} {} {} {}'.format(steering, throttle, speed, brake))
+    
+    
     
     # update driving log
     temp_driving_log = {"center" : img_name_center,
                         "right" : img_name_right,
                         "left" : img_name_left,
-                        "sensor1" : sensor1,
-                        "sensor2" : sensor2,
-                        "sensor3" : sensor3,
-                        "sensor4" : sensor4,
-                        "sensor5" : sensor5,
-                        "sensor6" : sensor6,
+                        "signal1" : signal1,
+                        "signal2" : signal2,
+                        "signal3" : signal3,
+                        "signal4" : signal4,
+                        "signal5" : signal5,
+                        "signal6" : signal6,
                         "steering" : steering,
                         "thorttle" : thorttle,
                         "speed" : speed,
@@ -72,28 +199,7 @@ while vrep.simxGetConnectionId(clientID) != -1:
     driving_log = driving_log.append(temp_driving_log, ignore_index=True)
     driving_log.to_csv("data/driving_log.csv")
     
-    print('hi')
     
-    
-    #image acquisition
-    #image center
-    #https://programmer.group/v-rep-adding-vision-sensor-and-image-acquisition.html
-    err,resolution,image = vrep.simxGetVisionSensorImage(clientID,camera,0,vrep.simx_opmode_buffer)
-    sensorImage = []
-    sensorImage = np.array(image,dtype = np.uint8)
-    sensorImage.resize([128,128,3])
-    img_center = Image.fromarray(sensorImage, 'RGB')
-    
-    #image right
-    img_right = img_center
-    
-    #image left
-    img_left = img_center
-    
-    # image save
-    img_center.save(img_name_center) 
-    img_right.save(img_name_right)
-    img_left.save(img_name_left)
     
     #make interval 1 second
     time.sleep(1)

@@ -10,6 +10,7 @@ import numpy as np
 import csv
 import tensorflow
 
+
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Conv2D, MaxPooling2D 
 from keras.layers import Lambda, Cropping2D, Dropout, ELU
@@ -60,8 +61,8 @@ def load_images(lines_path, image_path):
 
 # Load Images and Split
     
-file = './data-sample/driving_log.csv'
-image_path = './data-sample/img/'
+file = './data/driving_log.csv'
+image_path = './data/img/'
 
 #load image names in the csv file
 lines_path = load_csv(file)
@@ -107,7 +108,7 @@ model = Sequential()
 
 # Crop 70 pixels from the top of the image and 25 from the bottom
 model.add(Cropping2D(cropping=((75, 25), (0, 0)),
-                     input_shape=(128, 128, 3),
+                     input_shape=(256,512, 3),
                      data_format="channels_last"))
 
 # Resize the data
