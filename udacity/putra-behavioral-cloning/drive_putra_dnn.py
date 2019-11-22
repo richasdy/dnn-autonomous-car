@@ -77,6 +77,9 @@ err_speed,speed=vrep.simxGetFloatSignal(clientID,handler_speed,vrep.simx_opmode_
 err_brake,brake=vrep.simxGetFloatSignal(clientID,handler_brake,vrep.simx_opmode_streaming)
 
 images = []    
+
+model = load_model('model_train_turki_putra.h5')
+
 '''~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~My Loop Start From Here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '''
 
 while vrep.simxGetConnectionId(clientID) != -1:
@@ -112,24 +115,27 @@ while vrep.simxGetConnectionId(clientID) != -1:
     sensorImage_c = []
     sensorImage_c = np.array(image_c,dtype = np.uint8)
     sensorImage_c.resize([256,512,3])
+#    sensorImage_c.resize([128,128,3])
     img_center = Image.fromarray(sensorImage_c, 'RGB')
-    img_center = Image.open(BytesIO(base64.b64decode(img_center)))
+#    img_center = Image.open(BytesIO(base64.b64decode(img_center)))
     
     #image left
     err_l,resolution_l,image_l = vrep.simxGetVisionSensorImage(clientID,handler_camera_l,0,vrep.simx_opmode_buffer)
     sensorImage_l = []
     sensorImage_l = np.array(image_c,dtype = np.uint8)
     sensorImage_l.resize([256,512,3])
+#    sensorImage_l.resize([128,128,3])
     img_left = Image.fromarray(sensorImage_l, 'RGB')
-    img_left = Image.open(BytesIO(base64.b64decode(img_left)))
+#    img_left = Image.open(BytesIO(base64.b64decode(img_left)))
     
     #image right
     err_r,resolution_r,image_r = vrep.simxGetVisionSensorImage(clientID,handler_camera_r,0,vrep.simx_opmode_buffer)
     sensorImage_r = []
     sensorImage_r = np.array(image_r,dtype = np.uint8)
     sensorImage_r.resize([256,512,3])
+#    sensorImage_r.resize([128,128,3])
     img_right = Image.fromarray(sensorImage_r, 'RGB')
-    img_right = Image.open(BytesIO(base64.b64decode(img_right)))
+#    img_right = Image.open(BytesIO(base64.b64decode(img_right)))
     
     #sensor1
     err_signal1,signal1=vrep.simxGetFloatSignal(clientID,handler_sensor1,vrep.simx_opmode_buffer)
@@ -165,19 +171,10 @@ while vrep.simxGetConnectionId(clientID) != -1:
     
     
     # prediction
-    model = load_model('model_train_turki_putra.h5')
-    
-#    # from turki code
-#    imgString = data["image"]
-#    image = Image.open(BytesIO(base64.b64decode(imgString)))
-#    image_array = np.asarray(image)
-#    steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
     
     # from turki training
-    images = images.append(img_center)
-    images = images.append(img_left)
-    images = images.append(img_right)
-    images = np.array(images)    
+    images = [sensorImage_c, sensorImage_l, sensorImage_r]
+    images = np.array(images)
     
     steering = model.predict([[images[0]]])
     
@@ -189,7 +186,7 @@ while vrep.simxGetConnectionId(clientID) != -1:
     
     throttle = 1.0 - steering**2 - (speed/speed_limit)**2
     
-    print('{} {} {} {}'.format(steering, throttle, speed, brake))
+    print('{} {} {} {} {}'.format(datetime.utcnow(), steering, throttle, speed, brake))
     
     
     
