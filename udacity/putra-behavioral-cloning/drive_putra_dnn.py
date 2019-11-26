@@ -42,39 +42,39 @@ err_handler_camera_l,handler_camera_l = vrep.simxGetObjectHandle(clientID,'golfc
 err_handler_camera_r,handler_camera_r = vrep.simxGetObjectHandle(clientID,'golfcar_vision_r',vrep.simx_opmode_oneshot_wait)
 
 #sensor handler
-err_handler_sensor1,handler_sensor1 = vrep.simxGetObjectHandle(clientID,'sensor1',vrep.simx_opmode_oneshot_wait)
-err_handler_sensor2,handler_sensor2 = vrep.simxGetObjectHandle(clientID,'sensor2',vrep.simx_opmode_oneshot_wait)
-err_handler_sensor3,handler_sensor3 = vrep.simxGetObjectHandle(clientID,'sensor3',vrep.simx_opmode_oneshot_wait)
-err_handler_sensor4,handler_sensor4 = vrep.simxGetObjectHandle(clientID,'sensor4',vrep.simx_opmode_oneshot_wait)
-err_handler_sensor5,handler_sensor5 = vrep.simxGetObjectHandle(clientID,'sensor5',vrep.simx_opmode_oneshot_wait)
-err_handler_sensor6,handler_sensor6 = vrep.simxGetObjectHandle(clientID,'sensor6',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor1,handler_sensor1 = vrep.simxGetObjectHandle(clientID,'sensor1',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor2,handler_sensor2 = vrep.simxGetObjectHandle(clientID,'sensor2',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor3,handler_sensor3 = vrep.simxGetObjectHandle(clientID,'sensor3',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor4,handler_sensor4 = vrep.simxGetObjectHandle(clientID,'sensor4',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor5,handler_sensor5 = vrep.simxGetObjectHandle(clientID,'sensor5',vrep.simx_opmode_oneshot_wait)
+#err_handler_sensor6,handler_sensor6 = vrep.simxGetObjectHandle(clientID,'sensor6',vrep.simx_opmode_oneshot_wait)
 
 #state handler
-err_handler_steering,handler_steering = vrep.simxGetObjectHandle(clientID,'steering',vrep.simx_opmode_oneshot_wait)
-err_handler_thorttle,handler_thorttle = vrep.simxGetObjectHandle(clientID,'thorttle',vrep.simx_opmode_oneshot_wait)
-err_handler_speed,handler_speed = vrep.simxGetObjectHandle(clientID,'speed',vrep.simx_opmode_oneshot_wait)
-err_handler_brake,handler_brake = vrep.simxGetObjectHandle(clientID,'brake',vrep.simx_opmode_oneshot_wait)
+#err_handler_steering,handler_steering = vrep.simxGetObjectHandle(clientID,'steering',vrep.simx_opmode_oneshot_wait)
+#err_handler_thorttle,handler_thorttle = vrep.simxGetObjectHandle(clientID,'thorttle',vrep.simx_opmode_oneshot_wait)
+#err_handler_speed,handler_speed = vrep.simxGetObjectHandle(clientID,'speed',vrep.simx_opmode_oneshot_wait)
+#err_handler_brake,handler_brake = vrep.simxGetObjectHandle(clientID,'brake',vrep.simx_opmode_oneshot_wait)
 
 vrep.simxStartSimulation(clientID,vrep.simx_opmode_oneshot_wait)
 
 #get image
 err_image_c,resolution_image_c,image_c = vrep.simxGetVisionSensorImage(clientID,handler_camera_c,0,vrep.simx_opmode_streaming)
-err_image_c,resolution_image_c,image_l = vrep.simxGetVisionSensorImage(clientID,handler_camera_l,0,vrep.simx_opmode_streaming)
-err_image_c,resolution_image_c,image_r = vrep.simxGetVisionSensorImage(clientID,handler_camera_r,0,vrep.simx_opmode_streaming)
+err_image_l,resolution_image_c,image_l = vrep.simxGetVisionSensorImage(clientID,handler_camera_l,0,vrep.simx_opmode_streaming)
+err_image_r,resolution_image_c,image_r = vrep.simxGetVisionSensorImage(clientID,handler_camera_r,0,vrep.simx_opmode_streaming)
 
 #get sensor
-err_signal1,signal1=vrep.simxGetFloatSignal(clientID,handler_sensor1,vrep.simx_opmode_streaming)
-err_signal2,signal2=vrep.simxGetFloatSignal(clientID,handler_sensor2,vrep.simx_opmode_streaming)
-err_signal3,signal3=vrep.simxGetFloatSignal(clientID,handler_sensor3,vrep.simx_opmode_streaming)
-err_signal4,signal4=vrep.simxGetFloatSignal(clientID,handler_sensor4,vrep.simx_opmode_streaming)
-err_signal5,signal5=vrep.simxGetFloatSignal(clientID,handler_sensor5,vrep.simx_opmode_streaming)
-err_signal6,signal6=vrep.simxGetFloatSignal(clientID,handler_sensor6,vrep.simx_opmode_streaming)
+err_signal1,signal1=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor1',vrep.simx_opmode_streaming) #front
+err_signal2,signal2=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor2',vrep.simx_opmode_streaming) #front_right
+err_signal3,signal3=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor3',vrep.simx_opmode_streaming) #front_left
+err_signal4,signal4=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor4',vrep.simx_opmode_streaming) #rear_left
+err_signal5,signal5=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor5',vrep.simx_opmode_streaming) #rear_right
+err_signal6,signal6=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor6',vrep.simx_opmode_streaming) #rear
 
 #get state
-err_steering,steering=vrep.simxGetFloatSignal(clientID,handler_steering,vrep.simx_opmode_streaming)
-err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,handler_thorttle,vrep.simx_opmode_streaming)
-err_speed,speed=vrep.simxGetFloatSignal(clientID,handler_speed,vrep.simx_opmode_streaming)
-err_brake,brake=vrep.simxGetFloatSignal(clientID,handler_brake,vrep.simx_opmode_streaming)
+err_steering,steering=vrep.simxGetFloatSignal(clientID,'handler_steering',vrep.simx_opmode_streaming)
+err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,'handler_thortle',vrep.simx_opmode_streaming)
+err_speed,speed=vrep.simxGetFloatSignal(clientID,'handler_speed',vrep.simx_opmode_streaming)
+err_brake,brake=vrep.simxGetIntegerSignal(clientID,'handler_brake',vrep.simx_opmode_streaming)
 
 images = []    
 
@@ -137,35 +137,35 @@ while vrep.simxGetConnectionId(clientID) != -1:
     img_right = Image.fromarray(sensorImage_r, 'RGB')
 #    img_right = Image.open(BytesIO(base64.b64decode(img_right)))
     
-    #sensor1
-    err_signal1,signal1=vrep.simxGetFloatSignal(clientID,handler_sensor1,vrep.simx_opmode_buffer)
+     #sensor1
+    err_signal1,signal1=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor1',vrep.simx_opmode_buffer)
     
     #sensor2
-    err_signal2,signal2=vrep.simxGetFloatSignal(clientID,handler_sensor2,vrep.simx_opmode_buffer)
+    err_signal2,signal2=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor2',vrep.simx_opmode_buffer)
     
     #sensor3
-    err_signal3,signal3=vrep.simxGetFloatSignal(clientID,handler_sensor3,vrep.simx_opmode_buffer)
+    err_signal3,signal3=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor3',vrep.simx_opmode_buffer)
     
     #sensor4
-    err_signal4,signal4=vrep.simxGetFloatSignal(clientID,handler_sensor4,vrep.simx_opmode_buffer)
+    err_signal4,signal4=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor4',vrep.simx_opmode_buffer)
     
     #sensor5
-    err_signal5,signal5=vrep.simxGetFloatSignal(clientID,handler_sensor5,vrep.simx_opmode_buffer)
+    err_signal5,signal5=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor5',vrep.simx_opmode_buffer)
     
     #sensor6
-    err_signal6,signal6=vrep.simxGetFloatSignal(clientID,handler_sensor6,vrep.simx_opmode_buffer)
+    err_signal6,signal6=vrep.simxGetFloatSignal(clientID,'golfcar_ultra_sensor6',vrep.simx_opmode_buffer)
     
     #steering
-    err_steering,steering=vrep.simxGetFloatSignal(clientID,handler_steering,vrep.simx_opmode_buffer)
+    err_steering,steering=vrep.simxGetFloatSignal(clientID,'handler_steering',vrep.simx_opmode_buffer)
     
     #thorttle
-    err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,handler_thorttle,vrep.simx_opmode_buffer)
+    err_thorttle,thorttle=vrep.simxGetFloatSignal(clientID,'handler_thortle',vrep.simx_opmode_buffer)
     
     #speed
-    err_speed,speed=vrep.simxGetFloatSignal(clientID,handler_speed,vrep.simx_opmode_buffer)
+    err_speed,speed=vrep.simxGetFloatSignal(clientID,'handler_speed',vrep.simx_opmode_buffer)
     
     #brake
-    err_brake,brake=vrep.simxGetFloatSignal(clientID,handler_brake,vrep.simx_opmode_buffer)
+    err_brake,brake=vrep.simxGetFloatSignal(clientID,'handler_brake',vrep.simx_opmode_buffer)
     
     
     
@@ -191,10 +191,10 @@ while vrep.simxGetConnectionId(clientID) != -1:
     
     
     # send control
-    vrep.simxSetFloatSignal(clientID,'steering',steering ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'throttle',throttle ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'speed',speed ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'brake',brake ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'handler_steering',steering ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'handler_throttle',throttle ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'handler_speed',speed ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'handler_brake',brake ,vrep.simx_opmode_oneshot)
     
     
     

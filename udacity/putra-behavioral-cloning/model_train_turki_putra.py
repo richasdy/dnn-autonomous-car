@@ -61,8 +61,8 @@ def load_images(lines_path, image_path):
 
 # Load Images and Split
     
-file = './data/driving_log.csv'
-image_path = './data/img/'
+file = './data-sample/driving_log.csv'
+image_path = './data-sample/img/'
 
 #load image names in the csv file
 lines_path = load_csv(file)
@@ -161,7 +161,7 @@ model.summary()
 
 earlystopper = EarlyStopping(patience=5, verbose=1)
 checkpointer = ModelCheckpoint('model_train_turki_putra.h5', monitor='val_loss', verbose=1, save_best_only=True)
-results = model.fit(X_train_s, y_train_s, batch_size=32, epochs=1, verbose=1)
+results = model.fit(X_train_s, y_train_s, batch_size=32, epochs=100, verbose=1)
 model.save('model_train_turki_putra.h5')
 
 print(model.evaluate(X_valid_s, y_valid_s))
