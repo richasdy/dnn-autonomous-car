@@ -100,9 +100,9 @@ while vrep.simxGetConnectionId(clientID) != -1:
     sensor4 = 0
     sensor5 = 0
     sensor6 = 0
-    steering = 30
-    thorttle = 40
-    speed = 10
+    steering = 0
+    thorttle = 0
+    speed = 0
     brake = 0
     
     
@@ -176,23 +176,23 @@ while vrep.simxGetConnectionId(clientID) != -1:
     images = [sensorImage_c, sensorImage_l, sensorImage_r]
     images = np.array(images)
     
+    # only use center image to drive
     steering = model.predict([[images[0]]])
     
-    #inspire by naoki
-    if speed > speed_limit:
-        speed_limit = MIN_SPEED  # slow down
-    else:
-        speed_limit = MAX_SPEED
+    #inspired by naoki
+#    if speed > speed_limit:
+#        speed_limit = MIN_SPEED  # slow down
+#    else:
+#        speed_limit = MAX_SPEED
+#    throttle = 1.0 - steering**2 - (speed/speed_limit)**2
     
-    throttle = 1.0 - steering**2 - (speed/speed_limit)**2
-    
-    print('{} {} {} {} {}'.format(datetime.utcnow(), steering, throttle, speed, brake))
+    print('{} {} {} {} {}'.format(datetime.utcnow(), steering, thorttle, speed, brake))
     
     
     
     # send control
     vrep.simxSetFloatSignal(clientID,'handler_steering',steering ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'handler_throttle',throttle ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'handler_throttle',thorttle ,vrep.simx_opmode_oneshot)
     vrep.simxSetFloatSignal(clientID,'handler_speed',speed ,vrep.simx_opmode_oneshot)
     vrep.simxSetFloatSignal(clientID,'handler_brake',brake ,vrep.simx_opmode_oneshot)
     
