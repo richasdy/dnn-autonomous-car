@@ -42,19 +42,22 @@ def load_images(lines_path, image_path):
     angles = []
     
     for line in lines:
-        for i in range(3):
-            source_path = line[i]
-            filename = source_path.split('/')[-1]
-            current_path = path+filename
-            image = cv2.imread(current_path)
-            images.append(image)
-            angle = float(line[3])
-            if i == 0:
-                angles.append(angle)
-            elif i == 1:
-                angles.append(angle + 0.20)
-            else:
-                angles.append(angle - 0.20)
+#        for i in range(3):
+#            source_path = line[i]
+#        only load center camera for training
+        source_path = line[0]
+        filename = source_path.split('/')[-1]
+        current_path = path+filename
+        image = cv2.imread(current_path)
+        images.append(image)
+        angle = float(line[9])
+        angles.append(angle)
+#            if i == 0:
+#                angles.append(angle)
+#            elif i == 1:
+#                angles.append(angle + 0.20)
+#            else:
+#                angles.append(angle - 0.20)
     X_train = np.array(images)
     y_train = np.array(angles) 
     return X_train, y_train
@@ -102,13 +105,17 @@ def resize(img):
     import tensorflow.compat.v1 as tensorflow
     tensorflow.disable_v2_behavior()
     return tensorflow.image.resize_images(img, (60, 120))
+#    return tensorflow.image.resize_images(img, (256,512))
 
 model = Sequential()
 #model = tensorflow.keras.Sequential()
 
 # Crop 70 pixels from the top of the image and 25 from the bottom
-model.add(Cropping2D(cropping=((75, 25), (0, 0)),
-                     input_shape=(256,512, 3),
+#model.add(Cropping2D(cropping=((75, 25), (0, 0)),
+#                     input_shape=(256,512, 3),
+#                     data_format="channels_last"))
+
+model.add(Cropping2D(input_shape=(256,512, 3),
                      data_format="channels_last"))
 
 # Resize the data
@@ -161,7 +168,7 @@ model.summary()
 
 earlystopper = EarlyStopping(patience=5, verbose=1)
 checkpointer = ModelCheckpoint('model_train_turki_putra.h5', monitor='val_loss', verbose=1, save_best_only=True)
-results = model.fit(X_train_s, y_train_s, batch_size=32, epochs=100, verbose=1)
+results = model.fit(X_train_s, y_train_s, batch_size=32, epochs=1000, verbose=1)
 model.save('model_train_turki_putra.h5')
 
 print(model.evaluate(X_valid_s, y_valid_s))
