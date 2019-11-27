@@ -186,15 +186,17 @@ while vrep.simxGetConnectionId(clientID) != -1:
 #        speed_limit = MAX_SPEED
 #    throttle = 1.0 - steering**2 - (speed/speed_limit)**2
     
+    throttle = 15
+    
     print('{} {} {} {} {}'.format(datetime.utcnow(), steering, thorttle, speed, brake))
     
     
     
     # send control
-    vrep.simxSetFloatSignal(clientID,'handler_steering',steering ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'handler_throttle',thorttle ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'handler_speed',speed ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'handler_brake',brake ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'target_steering',steering ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'target_throttle',thorttle ,vrep.simx_opmode_oneshot)
+#    vrep.simxSetFloatSignal(clientID,'target_speed',speed ,vrep.simx_opmode_oneshot)
+#    vrep.simxSetFloatSignal(clientID,'target_brake',brake ,vrep.simx_opmode_oneshot)
     
     
     
