@@ -78,7 +78,7 @@ err_brake,brake=vrep.simxGetIntegerSignal(clientID,'handler_brake',vrep.simx_opm
 
 images = []    
 
-model = load_model('model_train_turki_putra.h5')
+model = load_model('model_train_turki_putra_1000.h5')
 
 '''~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~My Loop Start From Here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '''
 
@@ -186,7 +186,7 @@ while vrep.simxGetConnectionId(clientID) != -1:
 #        speed_limit = MAX_SPEED
 #    throttle = 1.0 - steering**2 - (speed/speed_limit)**2
     
-    throttle = 15
+    throttle = 7
     
     print('{} {} {} {} {}'.format(datetime.utcnow(), steering, throttle, speed, brake))
     
@@ -194,7 +194,7 @@ while vrep.simxGetConnectionId(clientID) != -1:
     
     # send control
     vrep.simxSetFloatSignal(clientID,'target_steering',steering ,vrep.simx_opmode_oneshot)
-    vrep.simxSetFloatSignal(clientID,'target_throttle',thorttle ,vrep.simx_opmode_oneshot)
+    vrep.simxSetFloatSignal(clientID,'target_throttle',throttle ,vrep.simx_opmode_oneshot)
 #    vrep.simxSetFloatSignal(clientID,'target_speed',speed ,vrep.simx_opmode_oneshot)
 #    vrep.simxSetFloatSignal(clientID,'target_brake',brake ,vrep.simx_opmode_oneshot)
     
