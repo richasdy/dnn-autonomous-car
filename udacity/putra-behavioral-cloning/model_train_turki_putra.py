@@ -64,8 +64,8 @@ def load_images(lines_path, image_path):
 
 # Load Images and Split
     
-file = './data-sample/driving_log.csv'
-image_path = './data-sample/img/'
+file = './data-putra/driving_log.csv'
+image_path = './data-putra/img/'
 
 #load image names in the csv file
 lines_path = load_csv(file)
@@ -111,7 +111,7 @@ model = Sequential()
 #model = tensorflow.keras.Sequential()
 
 # Crop 70 pixels from the top of the image and 25 from the bottom
-#model.add(Cropping2D(cropping=((75, 25), (0, 0)),
+#model.add(Cropping2D(cropping=((128, 0), (0, 0)),
 #                     input_shape=(256,512, 3),
 #                     data_format="channels_last"))
 

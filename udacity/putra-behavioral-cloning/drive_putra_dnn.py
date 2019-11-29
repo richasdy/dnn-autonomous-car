@@ -188,7 +188,7 @@ while vrep.simxGetConnectionId(clientID) != -1:
     
     throttle = 15
     
-    print('{} {} {} {} {}'.format(datetime.utcnow(), steering, thorttle, speed, brake))
+    print('{} {} {} {} {}'.format(datetime.utcnow(), steering, throttle, speed, brake))
     
     
     
